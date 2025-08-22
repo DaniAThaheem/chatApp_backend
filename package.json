@@ -4,10 +4,12 @@
   "description": "A chat app project",
   "license": "ISC",
   "author": "Danish A.",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
+  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon src/index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
