@@ -49,11 +49,13 @@ app.use(cookieParser())
 
 import ChatRouter from "./routes/chat.routes.js"
 import ChatMessageRouter from "./routes/message.routes.js"
+import UserRouter from "./routes/user.routes.js"
 
 
 
 app.use("/api/v1/chats", ChatRouter)
-app.use("/api/v1/message", ChatMessageRouter)
+app.use("/api/v1/messages", ChatMessageRouter)
+app.use("/api/v1/users", UserRouter)
 
 
 

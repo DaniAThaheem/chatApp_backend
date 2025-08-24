@@ -17,7 +17,7 @@ const userRegisterValidator = ()=>{
         .withMessage("Username is required")
         .isLowercase()
         .withMessage("Username must be in lowercase")
-        .length({min:3})
+        .isLength({min:3})
         .withMessage("Username must be atleast 3 character long"),
         body("password")
         .trim()
@@ -73,7 +73,7 @@ const userForgotPasswordValdator = ()=>{
     ]
 }
 
-const userResetPassword = ()=>{
+const userResetPasswordValidator = ()=>{
     return [
         body("newPassword")
         .trim()
@@ -94,5 +94,5 @@ export {
     userChangePasswordValidator,
     userForgotPasswordValdator,
     userChangeRoleValidator,
-    userResetPassword
+    userResetPasswordValidator
 }
