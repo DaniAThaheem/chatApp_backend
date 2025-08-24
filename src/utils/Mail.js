@@ -52,7 +52,7 @@ export const sendMail = async(options)=>{
 
 
 
-export const emailVerificationMainGen = (name, verifcationUrl)=>{
+export const emailVerificationMailGen = (name, verifcationUrl)=>{
     return {
         body:{
             name,
