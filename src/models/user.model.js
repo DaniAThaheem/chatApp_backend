@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import { Available_Login_Types, Available_Roles, Available_Roles_Enum, DEFAULT_TOKEN_EXPIRY } from "../constants";
+import { Available_Login_Types, Available_Roles, Available_Roles_Enum, DEFAULT_TOKEN_EXPIRY } from "../constants.js";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
@@ -26,7 +26,7 @@ const userSchema = new Schema(
             index:true
         },
         email:{
-            tyep:String,
+            type:String,
             required:true,
             unique:true,
             lowercase:true,

@@ -47,6 +47,13 @@ app.use(cookieParser())
 
 
 
+import ChatRouter from "./routes/chat.routes.js"
+
+
+
+app.use("/api/v1/chats", ChatRouter)
+
+
 
 
 export {httpServer}
