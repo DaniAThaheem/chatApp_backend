@@ -26,9 +26,6 @@ import {
     userResetPasswordValidator,
 } from "../validators/user.validator.js"
 import {
-    mongoIdPathVariableValidator
-} from "../validators/mongoId.validator.js"
-import {
     upload
 } from "../middlewares/multer.middleware.js"
 

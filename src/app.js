@@ -8,6 +8,7 @@ import http from "http"
 import {Server} from "socket.io"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import { initializeSocketIO } from "./socket/index.js"
 
 
 const app = express()
@@ -50,14 +51,19 @@ app.use(cookieParser())
 import ChatRouter from "./routes/chat.routes.js"
 import ChatMessageRouter from "./routes/message.routes.js"
 import UserRouter from "./routes/user.routes.js"
+import errorHandler from "./middlewares/error.middleware.js"
 
-
+app.get("/", (req, res)=>{
+    console.log("reaching")
+})
 
 app.use("/api/v1/chats", ChatRouter)
 app.use("/api/v1/messages", ChatMessageRouter)
 app.use("/api/v1/users", UserRouter)
 
+initializeSocketIO(io)
 
+app.use(errorHandler)
 
 
 export {httpServer}
