@@ -43,7 +43,7 @@ const userSchema = new Schema(
         },
         loginType:{
             type:String,
-            enum:Available_Roles_Enum,
+            enum:Available_Login_Types,
             default:Available_Login_Types.EMAIL_PASSWORD
         },
         isEmailVerified:{
@@ -73,18 +73,24 @@ const userSchema = new Schema(
 
 userSchema.plugin(mongooseAggregatePaginate)
 
-userSchema.methods.isPasswordCorrect = async (password)=>{
-    return await bcrypt.compare(password, this.password)    
+userSchema.methods.isPasswordCorrect = async function(password){
+    const result = await bcrypt.compare(password, this.password)    
+    console.log(result);
+    return result
+    
 }
 
 userSchema.pre("save", async function(next){
-    if(!this.isModified(this.password)){
-        return
+    if(!this.isModified("password")){
+        console.log("returned")
+        return next()
     }
+    console.log("executed,", this.password)
     this.password = await bcrypt.hash(this.password, 10)
+    console.log("returned", this.password)
     next()
 })
-userSchema.methods.generateAccessToken = () =>{
+userSchema.methods.generateAccessToken = async function(){
     const accessToken = jwt.sign(
         {
             _id:this._id,
@@ -100,7 +106,7 @@ userSchema.methods.generateAccessToken = () =>{
     return accessToken
 }
 
-userSchema.methods.generateRefreshToken = () =>{
+userSchema.methods.generateRefreshToken = async function(){
     const refreshToken = jwt.sign(
         {
             _id:this._id,

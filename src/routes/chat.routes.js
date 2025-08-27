@@ -38,7 +38,7 @@ router.route("/")
 router.route("/users")
     .get(searchAvailableUsers)
 
-router.route("/c/receiverId")
+router.route("/c/:receiverId")
     .post(
         mongoIdPathVariableValidator("receiverId"),
         validate,
@@ -91,7 +91,7 @@ router.route("/leave/group/:chatId")
         leaveGroupChat
     )
 
-router.route("/remove/chatId")
+router.route("/remove/:chatId")
     .delete(
         mongoIdPathVariableValidator("chatId"),
         validate,

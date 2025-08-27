@@ -9,8 +9,8 @@ export const sendMail = async(options)=>{
         {
             theme:"default",
             product:{
-                name:"",
-                link:""
+                name:"chatty",
+                link:"http://localhost:8080"
             }
         }
     )
@@ -18,7 +18,7 @@ export const sendMail = async(options)=>{
     const htmlMailContent = mailgen.generate(options.mailContent)
     const textMailContent = mailgen.generatePlaintext(options.mailContent)
 
-    const transporter = nodemailer.createTestAccount(
+    const transporter = nodemailer.createTransport(
         {
             service:"gmail",
             auth:{
@@ -37,12 +37,10 @@ export const sendMail = async(options)=>{
     }
 
     try {
-        await transporter.sendMail(mail, (err, info)=>{
-            console.log("Error while sending mail", err)
-            console.log("Email send", info)
-        })
+        await transporter.sendMail(mail)
+            console.log("Email sent")
     } catch (error) {
-        
+        console.log("Error while sending mail", error)
     }
 
 }

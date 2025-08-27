@@ -2,11 +2,12 @@ import asyncHandler from "../utils/AsyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from '../utils/ApiResponse.js'
 import {User} from '../models/user.model.js'
-import { Available_Login_Types } from "../constants.js"
+import { Available_Login_Types, Available_Roles } from "../constants.js"
 import jwt from "jsonwebtoken"
 import {getStatiFilePath, getLocalPath} from "../utils/Helper.js"
 import {emailVerificationMailGen, resetForgotPasswordMailGen, sendMail} from "../utils/Mail.js"
 import crypto from "crypto"
+import { console } from "inspector"
 
 const generateAccessAndRefreshToken = async(uid)=>{
     const user = await User.findById(uid)
@@ -47,21 +48,23 @@ const registerUser = asyncHandler(async(req, res)=>{
             {username}
         ]
     })
-    if(!isUserExist){
+
+    console.log(isUserExist)
+    if(isUserExist){
         throw new ApiError(400, "User already exist")
     }
     const newUser = await User.create({
         email,
         username,
         password,
-        role,
+        role: role||Available_Roles.USER,
         loginType:Available_Login_Types.EMAIL_PASSWORD
     })
     if(!newUser){
         throw new ApiError(500, "Could not create the user")
     }
     //generate the token and send email verification mail
-    const {unhashedToken, hashedToken, tokenExpiry} = user.generateTemporaryToken()
+    const {unhashedToken, hashedToken, tokenExpiry} = newUser.generateTemporaryToken()
     newUser.emailVerificationToken=hashedToken
     newUser.emailVerificationExpiry=tokenExpiry
     newUser.save({validateBeforeSave:false})
@@ -85,9 +88,11 @@ const registerUser = asyncHandler(async(req, res)=>{
 })
 const loginUser = asyncHandler(async(req, res)=>{
     const {email, password} = req.body
+    console.log(email, password)    
     const isUserExist = await User.findOne({
         email
     })
+    console.log(isUserExist)
     if(!isUserExist){
         throw new ApiError(400, "Could not find user")
     }
@@ -96,6 +101,7 @@ const loginUser = asyncHandler(async(req, res)=>{
     }
     const isPasswordCorrect = await isUserExist.isPasswordCorrect(password)
     if(!isPasswordCorrect){
+        console.log(isPasswordCorrect)
         throw new ApiError(400, "Password is not correct")
     }
     const [accessToken, refreshToken] = await generateAccessAndRefreshToken(isUserExist._id)
@@ -115,7 +121,7 @@ const loginUser = asyncHandler(async(req, res)=>{
         new ApiResponse(
             200,
             [
-                ...user,
+                user,
                 accessToken,
                 refreshToken
             ],

@@ -61,6 +61,7 @@ const initializeSocketIO = (io)=>{
             if(!user){
                 throw new ApiError(401, "Invalid Token ... could not find user")
             }
+            console.log(user)
             socket.user = user
 
             socket.join(user?._id.toString())
@@ -87,6 +88,7 @@ const initializeSocketIO = (io)=>{
 }
 
 const  emitSocketEvent = (req, roomId, event, payload)=>{
+    console.log("Emitting socket event:", event, "to room:", roomId, "with payload:", payload)
     req.app.get("io").in(roomId).emit(event, payload)
 }
 

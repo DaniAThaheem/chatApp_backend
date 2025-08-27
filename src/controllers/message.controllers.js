@@ -101,12 +101,12 @@ const sendMessage = asyncHandler(async(req, res)=>{
     }
 
     let messageFiles =[]
-    if(req.files && req.files.attachments.length >0){
-        req.files.attachments.map((attachment)=>{
-            messageFiles.push(
+    if(req.files && req.files.attachments?.length >0){
+        req?.files?.attachments?.map((attachment)=>{
+            messageFiles?.push(
                 {
-                    url:getStatiFilePath(req, attachment.filename),
-                    localPath:getLocalPath(attachment.filename)
+                    url:getStatiFilePath(req, attachment?.filename),
+                    localPath:getLocalPath(attachment?.filename)
                 }
             )
         })
@@ -202,7 +202,7 @@ const deleteMessage = asyncHandler(async(req, res)=>{
             "Could not find message"
         )
     }
-    if(message.sender !== req.user?._id){
+    if(message.sender.toString() !== req.user?._id?.toString()){
         throw new ApiError(
             400,
             "You are not authorized to delete the message"
@@ -217,7 +217,7 @@ const deleteMessage = asyncHandler(async(req, res)=>{
         _id: new mongoose.Types.ObjectId(message?._id)
     })
 
-    if(selectedChat.lastMessage.toString() === message?._id.toString()){
+    if(selectedChat.lastMessage?.toString() === message?._id?.toString()){
         const lastMessage = await ChatMessage.findOne(
             {
                 chat:chatId
